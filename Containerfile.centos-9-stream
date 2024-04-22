@@ -1,0 +1,15 @@
+FROM quay.io/centos/centos:stream9
+
+RUN dnf update -y && dnf clean all
+
+RUN dnf --enablerepo crb install -y make cmake doxygen gcc git \
+    python3.11 python3.11-pip \
+    rpmdevtools pkgconf automake autoconf rpm-build \
+    dnf-plugins-core \
+    && dnf clean all
+
+RUN rpmdev-setuptree
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
